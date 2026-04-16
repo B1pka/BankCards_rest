@@ -1,6 +1,7 @@
 package com.example.bankcards.dto.User;
 
-import Role;
+
+import com.example.bankcards.entity.User.Role;
 
 public record UserResponse(
         Long id,
