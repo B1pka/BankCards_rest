@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-cards
+      author: B1pka
+      changes:
+        - createSequence:
+            sequenceName: cards_seq
+            startValue: 1
+            increment: 1
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: card_number
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: card_number_last4
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: owner_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: expiration_date
+                  type: date
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: balance
+                  type: numeric(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_cards_user
