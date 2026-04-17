@@ -1,7 +1,12 @@
 package com.example.bankcards.exception;
 
 import com.example.bankcards.dto.Error.ErrorResponse;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.bankcards.exception.CardException.CardBlockedException;
+import com.example.bankcards.exception.CardException.CardExpiredException;
+import com.example.bankcards.exception.CardException.CardNotFoundException;
+import com.example.bankcards.exception.TransferExceptions.TransferNotAllowedException;
+import com.example.bankcards.exception.UserExceptions.InsufficientFundsException;
+import com.example.bankcards.exception.UserExceptions.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,28 +20,32 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler({CardNotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<ErrorResponse> hadleEntityNotFound(
-            EntityNotFoundException exception,
+            RuntimeException exception,
             HttpServletRequest request
     ){
         return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage(), request);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgument(
-            IllegalArgumentException exception,
+    @ExceptionHandler({
+            InsufficientFundsException.class,
+            CardBlockedException.class,
+            CardExpiredException.class,
+            TransferNotAllowedException.class,
+            IllegalArgumentException.class})
+    public ResponseEntity<ErrorResponse> handleBadRequest(
+            RuntimeException exception,
             HttpServletRequest request
     ){
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), request);
     }
 
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalState(
-            IllegalStateException exception,
-            HttpServletRequest request
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleUnknown(
+            Exception exception, HttpServletRequest request
     ){
-        return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), request);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -6,9 +6,10 @@ import com.example.bankcards.dto.Card.CreateCardRequest;
 import com.example.bankcards.entity.Card.Card;
 import com.example.bankcards.entity.Card.CardStatus;
 import com.example.bankcards.entity.User.User;
+import com.example.bankcards.exception.CardException.CardNotFoundException;
+import com.example.bankcards.exception.UserExceptions.UserNotFoundException;
 import com.example.bankcards.repository.Card.CardRepository;
 import com.example.bankcards.repository.User.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class CardService {
     @Transactional
     public CardResponse createCard(CreateCardRequest request) {
         User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new UserNotFoundException(
                         "User with id %d not found".formatted(request.userId())
                 ));
 
@@ -60,7 +61,7 @@ public class CardService {
 
     public CardResponse getUserCardById(Long cardId, Long userId) {
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new CardNotFoundException(
                         "Card with id %d not found for user %d".formatted(cardId, userId)
                 ));
 
@@ -69,7 +70,7 @@ public class CardService {
 
     public CardBalanceResponse getUserCardBalance(Long cardId, Long userId) {
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new CardNotFoundException(
                         "Card with id %d not found for user %d".formatted(cardId, userId)
                 ));
 
@@ -79,7 +80,7 @@ public class CardService {
     @Transactional
     public CardResponse requestBlock(Long cardId, Long userId) {
         Card card = cardRepository.findByIdAndUserId(cardId, userId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new CardNotFoundException(
                         "Card with id %d not found for user %d".formatted(cardId, userId)
                 ));
 
@@ -90,7 +91,7 @@ public class CardService {
     @Transactional
     public CardResponse blockCard(Long cardId) {
         Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new CardNotFoundException(
                         "Card with id %d not found".formatted(cardId)
                 ));
 
@@ -101,7 +102,7 @@ public class CardService {
     @Transactional
     public CardResponse activateCard(Long cardId) {
         Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new EntityNotFoundException(
+                .orElseThrow(() -> new CardNotFoundException(
                         "Card with id %d not found".formatted(cardId)
                 ));
 
@@ -112,7 +113,7 @@ public class CardService {
     @Transactional
     public void deleteCard(Long cardId) {
         if (!cardRepository.existsById(cardId)) {
-            throw new EntityNotFoundException("Card with id %d not found".formatted(cardId));
+            throw new CardNotFoundException("Card with id %d not found".formatted(cardId));
         }
 
         cardRepository.deleteById(cardId);

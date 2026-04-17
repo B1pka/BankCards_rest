@@ -23,7 +23,6 @@ public class TransferController {
 
     @PostMapping
     public TransferResponse transfer(@RequestBody @Valid TransferRequest request, Authentication authentication){
-        System.out.println(">>> TRANSFER CONTROLLER: " + request);
         User currentUser = userService.getUserEntityByUsername(authentication.getName());
         return transferService.transferBetweenOwnCards(currentUser.getId(), request);
     }
