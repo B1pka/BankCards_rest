@@ -216,6 +216,5 @@ Authorization: Bearer <TOKEN>
 * ❌ Нет глобального обработчика ошибок (@RestControllerAdvice);
 * ❌ Нет unit / integration тестов;
 * ❌ docs/openapi.yaml не сделан;
-* ❌ GET /api/cards является не доделанным endpoint и просто возвращает строку "cards endpoint works"
 * ❌ AdminCardController удаление оформлено не как DELETE, а как PATCH /{id};
 * ❌ Swagger dependency подключена, но полноценная OpenAPI-документация ещё не описана.

@@ -20,7 +20,6 @@ public class AdminCardController {
 
     @PostMapping
     public CardResponse createCard(@RequestBody @Valid CreateCardRequest request){
-        System.out.println(">>> ADMIN CREATED CARD: " + request);
         return cardService.createCard(request);
     }
 
@@ -34,7 +33,7 @@ public class AdminCardController {
         return cardService.blockCard(id);
     }
 
-    @PatchMapping("/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCard(@PathVariable Long id){
         cardService.deleteCard(id);
     }
