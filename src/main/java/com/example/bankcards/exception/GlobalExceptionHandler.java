@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-        return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), request);
+        return buildResponse(HttpStatus.BAD_REQUEST, message, request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
